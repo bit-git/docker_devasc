@@ -1,0 +1,108 @@
+1. Start by installing Python. From the command line of a fresh Ubuntu VM, type:
+
+sudo apt update
+sudo apt -y install python python-pip
+
+2. Install the Flask package by typing:
+
+sudo pip install flask
+
+3. Open the firewall to enable web traffic to port 8080:
+
+sudo ufw allow 8080
+Rules updated
+Rules updated (v6)
+
+
+4. Now you need to create the simple web server. To do that, create a new Python file called sample-app.py and add the following text.
+
+from flask import Flask
+from flask import request
+
+sample = Flask(__name__)
+
+@sample.route("/")
+def main():
+     return "You are calling me from "+ request.remote_addr
+
+if __name__ == "__main__":
+     sample.run(port=8080, host="0.0.0.0")
+
+
+
+5. Finally we have to run the server itself. We can do that from the command line by using Python to run the script.
+
+sudo python sample-app.py
+
+
+
+
+mkdir templates
+mkdir static
+
+
+
+Now create a file in the templates directory called index.html and add the following code:
+
+<html>
+<head>
+    <title>Sample app</title>
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+    <h1>You are calling me from {{request.remote_addr}}</h1>
+</body>
+</html>
+
+
+
+We also need to create the static/style.css file:
+
+body {background: lightsteelblue;}
+
+
+
+
+from flask import Flask
+from flask import request
+from flask import render_template
+
+sample = Flask(__name__)
+
+@sample.route("/")
+def main():
+    return render_template("index.html")
+
+if __name__ == "__main__":
+    sample.run(host="0.0.0.0", port=8080)
+
+
+
+
+
+=======
+
+mkdir tempdir
+mkdir tempdir/templates
+mkdir tempdir/static
+
+cp sample-app.py tempdir/.
+cp -r templates/ tempdir/templates/.
+cp -r static/ tempdir/static/.
+
+echo "FROM python" >> tempdir/Dockerfile
+echo "RUN pip install flask" >> tempdir/Dockerfile
+echo "COPY  ./static /home/ubuntu/static/" >> tempdir/Dockerfile
+echo "COPY  ./templates /home/ubuntu/templates/" >> tempdir/Dockerfile
+echo "COPY  sample-app.py /home/ubuntu/" >> tempdir/Dockerfile
+echo "EXPOSE 8080" >> tempdir/Dockerfile
+echo "CMD python /home/ubuntu/sample_app.py" >> tempdir/Dockerfile
+
+cd tempdir
+sudo docker build -t sampleapp .
+
+sudo docker stop samplerunning
+sudo docker rm samplerunning
+sudo docker run -t -d -p 8000:8080 --name samplerunning sampleapp
+sudo docker ps -a
+

@@ -1,0 +1,148 @@
+GET
+
+import requests
+import json
+# Next, we will define a variable named `url` which will contain the url needed to retrieve a list of books currently inside of the virtual library.
+url = "http://localhost:8080/v1/books"
+# Now, making an HTTP request is as simple as using the following line of python code.
+# This will make a HTTP GET request to `http://localhost:8080/v1/books` and
+# store the HTTP response in a variable called `books`.
+books = requests.get(url)
+
+# If everything went well, we can now print out the contents of the HTTP response to the screen.
+# Since the virtual library API is producing Content-Type "application/json"
+# We can leverage the .json() function that will transform the HTTP Response body to a Python dictionary.
+print(json.dumps(books.json(), indent=4))
+
+
+====
+POST
+
+import requests
+import json
+
+# Next, we will define a variable named `url` which will contain the url needed to add a new book to the virtual library.
+url = "http://localhost:8080/v1/books"
+# Since we are ADDING a new book to the virtual library, we will need to supply some basic information on the book that our virtual library API requires. To add a book to the library, we need to supply the following.
+# - The book's name, for example. "The Art of Computer Programming"
+# - The author's of the book, for example. "Donald Knuth"
+# - The date the book was published, for example. 1968
+# - The ISBN of the book, for example. "0-201-03801-3"
+# We will represent a book using a Python dictionary. We can define a variable called `book` with the following code.
+book = {
+    "name": "The Art of Computer Programming",
+    "authors": ["Donald Knuth"],
+    "date": 1968,
+    "isbn": "0-201-03801-3"
+}
+# Now, making an HTTP POST request is as simple as using the following line of python code.
+# You'll notice that we are using a `named` parameter called `json` and supplying our Python dictionary (named `book`) to this named parameter.
+# When supplying the json named parameter, the requests package will automatically handle the deserialization of the dictionary
+# and set the Content-Type header to application/json for you.
+
+# This will make a HTTP POST request to http://localhost:8080/v1/books and store the HTTP response in a variable called response.
+response = requests.post(url, json=book)
+print(response.status_code)
+
+
+=====
+
+import urllib.request
+import json
+url = "http://localhost:8080/v1/books"
+book = {
+    "name": "The Art of Computer Programming",
+    "authors": ["Donald Knuth"],
+    "date": 1968,
+    "isbn": "0-201-03801-3"
+}
+payload = json.dumps(book).encode('utf8')
+request = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json'})
+response = urllib.request.urlopen(request)
+print(response.status)
+
+
+=====
+PUT
+
+
+import requests
+import json
+url = "http://localhost:8080/v1/books"
+book = {
+    "name": "The Art of Computer Programming",
+    "authors": [
+    "Donald Nuth"       # Typo
+    ],
+    "date": 1968,
+    "isbn": "0-201-03801-3"
+}
+
+# Add the Book with a Typo to the author's name
+response = requests.post(url, json=book)
+book_data = response.json()
+
+print("Response after ADDING the book to the library")
+print(json.dumps(book_data, indent=4))
+
+
+# Let's now update the Book with the correct author's name.
+book_data["authors"] = ["Donald Knuth"]
+update_book_url = "http://localhost:8080/v1/books/{}".format(book_data['uuid'])
+response = requests.put(update_book_url, json=book_data)
+
+print("http status code after updating the book: ", response.status_code)
+
+====
+DELETE
+
+import requests
+import json
+url = "http://localhost:8080/v1/books"
+book = {
+    "name": "The Art of Computer Programming",
+    "authors": [
+    "Donald Knuth"
+    ],
+    "date": 1968,
+    "isbn": "0-201-03801-3"
+}
+
+# Add the Book
+response = requests.post(url, json=book)
+book_data = response.json()
+
+
+# Let's now delete the book that we just added to the library.
+delete_book_url = "http://localhost:8080/v1/books/{}".format(book_data['uuid'])
+response = requests.delete(delete_book_url)
+
+print("http status code after deleting the book: ", response.status_code)
+
+
+=====
+AUTH
+
+import requests
+from requests.auth import HTTPBasicAuth
+import json
+import sys
+# Here we will attempt to retrieve all user accounts from the library
+# Since user accounts are considered a protected resource, only those who have
+# admin credentials should be able to access it.
+url = "http://localhost:8080/v1/accounts"
+
+## This is unsafe as the username and password are stored in plain text
+username = 'admin'
+password = 'w0FimhVrty1ck9Pf2UAK4luOnkEgrDvy1VEK9iZsZOk='
+
+# Leverage the HTTPBasicAuth class provided by the requests package
+accounts = requests.get(url, auth=HTTPBasicAuth(username, password))
+try:
+    accounts.raise_for_status()
+except requests.exceptions.HTTPError as e:
+    # this code will not be executed if the username and password are correct!
+    print("Error: {}".format(e))
+    sys.exit()
+# This code will be executed
+print(accounts.status_code)

@@ -1,0 +1,35 @@
+python test_json_search.py
+
+You can also run more specific tests by invoking unittest under Python, on the command line, with various arguments. You can run python -m unittest -h again to find out all the options. Here are some examples.
+
+Run tests from test_module:
+python -m unittest test_module
+
+Run tests from module.TestClass:
+python -m unittest module.TestClass
+
+Run a specific test method, such as module.Class.test_method:
+python -m unittest module.Class.test_method
+
+Notice that we don't need to specify the.py extension because unittest assumes it automatically.
+
+Running our test script using the -v, verbose output option:
+python -m unittest -v test_json_search
+
+
+========
+python -m unittest test_json_search-II
+
+========
+python -m unittest test_json_search-III
+
+python -m unittest
+
+we used python -m unittest to run the test, without specifying the file name? This is because the unittest Test Discovery feature will run any local file it finds whose name begins with test.
+
+python -m unittest test_json_search.json_search_test.test_is_a_list
+
+Only one test method will be executed.
+
+
+

@@ -1,0 +1,57 @@
+DNAC - json - X-Auth-Token
+Meraki - json - X-Cisco-Meraki-API-Key: <secret key>
+UCS - xml -
+UCS-Director v1 - xml/json - X-Cloupia-Request-Key: <secret key>
+UCS-Director v2 - xml
+Intersight - https - xml/json - an API key ID and a secret key
+WebEx - xapi - telnet/ssh/http/rs-232 - xml-json
+javascript macro for device customisation
+
+Finesse noti srv - xmpp / BOSH (Bi-di streams Over Synchronous HTTP)
+
+CUCM
+• AXL: XML/SOAP - administration and configuration - chane notification feature
+• UDS: REST - SSO/B-Auth - Enables end users to update their own personal settings
+
+AMP - API client ID with an API key for authentication
+ or use Basic HTTP authentication with a Base 64-encoded string that
+ combines your API client ID with the API key.
+ 
+X-Rate-Limit-Limit/Remaining/Reset
+
+FMC - REST - X-auth-access-token:<authentication token value>
+FTD - REST - OAuth
+
+netconf - rpc - yang - xml 
+NETCONF RFC has three distinct data stores that are the target of configuration reads and writes. These are:
+• running (mandatory)
+• candidate (optional)
+• startup (optional)
+
+RESTCONF - http - 'application/yang-data+json'/'application/yang-data+xml'
+RESTCONF supports only a running datastore as any edits of candidate data store are immediately committed
+- No lock 
+/restconf/<resource-type>/<yang-module:resource>
+https://<hostURL>/restconf<resource><container><leaf><options>
+
+
+NSO - device and service manager
+CDB - datastore 
+snmp / cli 
+Non-NETCONF devices are integrated into Device Manager using Network Element Drivers
+(NEDs).
+
+
+SDWAN 
+https://<vManage-hostname-or-IP-address:port>/j_security_check
+X-XSRF-TOKEN
+
+
+APIC
+http://APIC-IP/api/aaaLogin.json 
+"aaaUser": {
+        "attributes": {
+            "name": "username",
+            "pwd": "password"}
+
+APIC-cookie

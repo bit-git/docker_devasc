@@ -6,7 +6,6 @@ WORKDIR /root/dev-workspace/
 
 RUN git clone https://github.com/bit-git/docker_devasc.git .
 RUN python -m pip install -r requirements.txt
-RUN mkdir /root/.ssh && mv /root/dev-workspace/ssh_config /root/.ssh/config
 
 EXPOSE 8080 
 
